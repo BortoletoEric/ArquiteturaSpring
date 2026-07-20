@@ -46,4 +46,15 @@ public class Motor {
     public void setPotencia(Integer potencia) {
         this.potencia = potencia;
     }
+
+    @Override
+    public String toString() {
+        return "Motor{" +
+                "modelo='" + modelo + '\'' +
+                ", potencia=" + potencia +
+                ", cilindros=" + cilindros +
+                ", litragem=" + litragem +
+                ", tipo=" + tipo +
+                '}';
+    }
 }
