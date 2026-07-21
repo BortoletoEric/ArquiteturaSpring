@@ -3,7 +3,7 @@ package io.github.bortoletoeric.arquiteturaspring.todo;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tb_odo")
+@Table(name = "tb_todo")
 public class TodoEntity {
 
     @Id()
