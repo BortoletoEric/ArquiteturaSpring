@@ -6,9 +6,33 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+/**
+ * Aplicação Spring Boot principal para o projeto Arquitetura Spring.
+ * 
+ * <p>Esta aplicação demonstra os conceitos fundamentais de arquitetura
+ * em aplicações Spring Boot, incluindo:</p>
+ * <ul>
+ *   <li>Injeção de Dependência (Dependency Injection)</li>
+ *   <li>Configuração de Beans do Spring</li>
+ *   <li>Anotações customizadas para Qualifiers</li>
+ *   <li>REST Controllers</li>
+ * </ul>
+ * 
+ * <p>O tema pedagógico utilizado é uma "Montadora de Carros" onde demonstramos
+ * como injetar diferentes tipos de motors em um veículo.</p>
+ * 
+ * @author Eric Bortoleto
+ * @version 0.0.1-SNAPSHOT
+ * @since 1.0
+ */
 @SpringBootApplication
 public class ArquiteturaspringApplication {
 
+    /**
+     * Ponto de entrada da aplicação Spring Boot.
+     * 
+     * @param args argumentos da linha de comando passados para a aplicação
+     */
     public static void main(String[] args) {
 //		SpringApplication.run(ArquiteturaspringApplication.class, args);
 
