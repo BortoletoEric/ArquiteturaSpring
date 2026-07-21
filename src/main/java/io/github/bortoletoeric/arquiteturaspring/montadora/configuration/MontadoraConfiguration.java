@@ -5,22 +5,40 @@ import io.github.bortoletoeric.arquiteturaspring.montadora.Motor;
 import io.github.bortoletoeric.arquiteturaspring.montadora.TipoMotor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class MontadoraConfiguration {
-    @Bean
-    public Montadora montadora(){
 
-        return null;
+    @Primary
+    @Bean("motorAspirado")
+    public Motor motorAspirado(){
+        var motor = new Motor();
+        motor.setPotencia(130);
+        motor.setCilindros(4);
+        motor.setModelo("X-PIRITO");
+        motor.setLitragem(1.7);
+        motor.setTipo(TipoMotor.ASPIRADO);
+        return motor;
     }
 
-    @Bean
-    public Motor motor(){
+    @Bean("motorEletrico")
+    public Motor motorEletrico(){
         var motor = new Motor();
         motor.setPotencia(200);
+        motor.setModelo("XPTO-50");
+        motor.setLitragem(1.0);
+        motor.setTipo(TipoMotor.ELETRICO);
+        return motor;
+    }
+
+    @Bean("motorTurbo")
+    public Motor motorTurbo(){
+        var motor = new Motor();
+        motor.setPotencia(250);
         motor.setCilindros(4);
-        motor.setModelo("Civic G7");
-        motor.setLitragem(1.7);
+        motor.setModelo("TH-40");
+        motor.setLitragem(1.5);
         motor.setTipo(TipoMotor.TURBO);
         return motor;
     }
