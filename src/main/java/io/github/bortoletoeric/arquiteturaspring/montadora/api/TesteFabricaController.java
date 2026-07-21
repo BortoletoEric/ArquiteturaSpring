@@ -2,7 +2,6 @@ package io.github.bortoletoeric.arquiteturaspring.montadora.api;
 
 import io.github.bortoletoeric.arquiteturaspring.montadora.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,11 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TesteFabricaController {
 
     @Autowired
-    @Qualifier("motorTurbo")
-//    Caso não seja definido um motor,
-//    será assumido que o motor é aquele
-//    que na clase pai é definido como Primary.
-
+    @Aspirado
     private Motor motor;
 
     @PostMapping

@@ -1,6 +1,5 @@
 package io.github.bortoletoeric.arquiteturaspring.montadora.configuration;
 
-import io.github.bortoletoeric.arquiteturaspring.montadora.Montadora;
 import io.github.bortoletoeric.arquiteturaspring.montadora.Motor;
 import io.github.bortoletoeric.arquiteturaspring.montadora.TipoMotor;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class MontadoraConfiguration {
 
-    @Primary
     @Bean("motorAspirado")
     public Motor motorAspirado(){
         var motor = new Motor();
@@ -32,6 +30,7 @@ public class MontadoraConfiguration {
         return motor;
     }
 
+    @Primary
     @Bean("motorTurbo")
     public Motor motorTurbo(){
         var motor = new Motor();
