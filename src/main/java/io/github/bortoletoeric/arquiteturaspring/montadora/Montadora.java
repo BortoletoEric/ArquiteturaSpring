@@ -18,5 +18,5 @@ public enum Montadora {
     HONDA,
     TOYOTA,
     NISSAN,
-    Mitsubishi
+    MITSUBISHI
 }
