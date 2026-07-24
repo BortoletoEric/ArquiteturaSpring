@@ -1,6 +1,6 @@
 # Arquitetura Spring
 
-Um projeto educacional que demonstra os conceitos fundamentais de arquitetura em aplicações **Spring Boot**, utilizando o tema de uma **Montadora de Carros** como exemplo prático.
+Um projeto educacional que demonstra os conceitos fundamentais de arquitetura em aplicações **Spring Boot**, utilizando dois contextos práticos: uma **Montadora de Carros** e um sistema de **Gerenciamento de To Do's**.
 
 ## 📋 Índice
 
@@ -23,13 +23,21 @@ Este projeto demonstra padrões e boas práticas de arquitetura em aplicações 
 - **REST Controllers**: Exposição de endpoints HTTP
 - **Design Patterns**: Uso de padrões de projeto como Strategy e Factory
 
-### Tema: Montadora de Carros
+### Temas
 
+#### 1. Montadora de Carros
 O projeto utiliza uma analogia com uma montadora de automóveis onde:
 - **Carros** são os produtos finais
 - **Motores** são componentes que podem ser intercambiados (dependências)
 - **Chaves** validam o acesso aos veículos
 - **Montadoras** definem marcas e proprietários
+
+#### 2. Sistema de To Do's
+Sistema completo de gerenciamento de tarefas que demonstra:
+- **CRUD** (Create, Read, Update)
+- **Validação de dados** com regras de negócio
+- **Persistência com JPA**
+- **Notificações** através de email
 
 ## 🏗️ Arquitetura
 
@@ -71,6 +79,25 @@ src/main/java/io/github/bortoletoeric/arquiteturaspring/
 │
 ├── ArquiteturaspringApplication.java
 │   └── Classe principal que inicia a aplicação Spring Boot
+│
+├── todo/
+│   ├── TodoEntity.java
+│   │   └── Entidade JPA que representa uma tarefa
+│   │
+│   ├── TodoService.java
+│   │   └── Serviço que implementa a lógica de negócio
+│   │
+│   ├── TodoRepository.java
+│   │   └── Interface para acesso aos dados (JpaRepository)
+│   │
+│   ├── TodoValidator.java
+│   │   └── Validador de regras de negócio
+│   │
+│   ├── TodoController.java
+│   │   └── REST Controller com endpoints CRUD
+│   │
+│   └── MailSender.java
+│       └── Componente para envio de notificações por email
 │
 └── montadora/
     ├── Motor.java
@@ -193,6 +220,40 @@ public class TesteFabricaController {
 
 **O que é?** Diferentes implementações de Motor (Turbo, Aspirado, Elétrico) que podem ser intercambiadas.
 
+### 6. Validação e Regras de Negócio
+
+**O que é?** Implementação de validadores para garantir integridade dos dados e regras de negócio.
+
+**Exemplo (Módulo To Do):**
+```java
+@Component
+public class TodoValidator {
+    public void validar(TodoEntity todoEntity) throws IllegalAccessException {
+        if (existeTodoComEssaDescricao(todoEntity.getDescription())) {
+            throw new IllegalAccessException("Já existe um TODO com essa descrição");
+        }
+    }
+}
+```
+
+### 7. Persistência com JPA
+
+**O que é?** Mapeamento objeto-relacional e operações de banco de dados através de JPA/Hibernate.
+
+**Exemplo (Módulo To Do):**
+```java
+@Entity
+@Table(name = "tb_todo")
+public class TodoEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    
+    @Column(name = "description")
+    private String description;
+}
+```
+
 ## 🚀 Como Executar
 
 ### Pré-requisitos
@@ -230,7 +291,62 @@ A documentação estará disponível em `target/site/apidocs/index.html`
 
 ## 📝 Exemplos de Uso
 
-### Ligar um Carro (POST /carros)
+### Módulo To Do's
+
+#### Criar um To Do (POST /todos)
+
+**Requisição:**
+```bash
+curl -X POST http://localhost:8080/todos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Estudar Spring Boot",
+    "completed": false
+  }'
+```
+
+**Resposta (Sucesso):**
+```json
+{
+  "id": 1,
+  "description": "Estudar Spring Boot",
+  "completed": false
+}
+```
+
+#### Buscar um To Do (GET /todos/{id})
+
+**Requisição:**
+```bash
+curl -X GET http://localhost:8080/todos/1
+```
+
+**Resposta:**
+```json
+{
+  "id": 1,
+  "description": "Estudar Spring Boot",
+  "completed": false
+}
+```
+
+#### Atualizar Status de um To Do (PUT /todos/{id})
+
+**Requisição:**
+```bash
+curl -X PUT http://localhost:8080/todos/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Estudar Spring Boot",
+    "completed": true
+  }'
+```
+
+**Resposta:** (HTTP 200 OK)
+
+### Módulo Montadora de Carros
+
+#### Ligar um Carro (POST /carros)
 
 **Requisição:**
 ```bash
@@ -268,7 +384,66 @@ Resposta:
 
 ## 📚 Documentação das Classes
 
-### Motor
+### Módulo To Do's
+
+#### TodoEntity
+
+Entidade JPA que representa uma tarefa no sistema.
+
+**Propriedades:**
+- `id`: Integer - Identificador único (auto-incrementado)
+- `description`: String - Descrição da tarefa
+- `completed`: Boolean - Status de conclusão
+
+**Métodos Principais:**
+- `getId()` / `setId()` - Acesso ao identificador
+- `getDescription()` / `setDescription()` - Acesso à descrição
+- `getCompleted()` / `setCompleted()` - Acesso ao status
+
+#### TodoService
+
+Serviço que implementa a lógica de negócio para gerenciamento de tarefas. Orquestra operações de validação, persistência e notificação.
+
+**Métodos Principais:**
+- `salvar(TodoEntity)` - Valida e persiste uma nova tarefa
+- `atualizarStatus(TodoEntity)` - Atualiza o status e notifica via email
+- `buscarPorId(Integer)` - Busca uma tarefa pelo identificador
+
+#### TodoRepository
+
+Interface que estende JpaRepository, fornecendo operações CRUD e queries customizadas.
+
+**Métodos:**
+- `save()` - Persiste uma tarefa
+- `findById()` - Busca por ID
+- `existsByDescription()` - Verifica existência de tarefa por descrição
+
+#### TodoValidator
+
+Componente responsável por validar regras de negócio para tarefas.
+
+**Método:**
+- `validar(TodoEntity)` - Valida que não existe tarefa com mesma descrição
+
+#### TodoController
+
+REST Controller que expõe os endpoints para operações CRUD.
+
+**Endpoints:**
+- `POST /todos` - Criar novo to do
+- `PUT /todos/{id}` - Atualizar status
+- `GET /todos/{id}` - Buscar to do por ID
+
+#### MailSender
+
+Componente para envio de notificações por email.
+
+**Métodos:**
+- `sendMail(String)` - Envia mensagem de notificação
+
+### Módulo Montadora de Carros
+
+#### Motor
 
 Representa um motor de automóvel com suas características técnicas.
 
@@ -399,13 +574,17 @@ A aplicação é executada com o profile `production` ativo, conforme definido e
 
 Este projeto é ideal para aprender:
 
-- ✅ Injeção de Dependência em Spring
+- ✅ Injeção de Dependência em Spring (por anotação e construtor)
 - ✅ Configuração de Beans
 - ✅ Anotações customizadas e Qualifiers
-- ✅ REST Controllers e endpoints
-- ✅ Padrões de Projeto
+- ✅ REST Controllers e endpoints HTTP
+- ✅ Padrões de Projeto (Strategy, Factory, Template Method)
 - ✅ Arquitetura de aplicações Spring Boot
 - ✅ Como documentar código com JavaDocs
+- ✅ Persistência com JPA/Hibernate
+- ✅ Validação de dados e regras de negócio
+- ✅ CRUD completo (Create, Read, Update)
+- ✅ Injeção de dependência via construtor
 
 ## 👤 Autor
 
