@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * Aplicação Spring Boot principal para o projeto Arquitetura Spring.
@@ -41,9 +42,15 @@ public class ArquiteturaspringApplication {
         builder.run(args);
 
         builder.bannerMode(Banner.Mode.OFF);
-        ConfigurableApplicationContext context = builder.context();
-
+        ConfigurableApplicationContext applicationContext = builder.context();
+        ConfigurableEnvironment env = applicationContext.getEnvironment();
         builder.profiles("production");
+
+        String applicationName = env.getProperty("spring.application.name");
+        System.out.println("Application Name: " + applicationName);
+
+        ExemploValue value = applicationContext.getBean(ExemploValue.class);
+        value.imprimirVariavel();
     }
 
 }
